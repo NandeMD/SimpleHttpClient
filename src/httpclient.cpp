@@ -4,6 +4,30 @@
 http::Response::Response(std::string raw)
 {
     this->raw = raw;
+
+    size_t double_new_line = raw.find("\n\n");
+    bool is_there_a_double_new = double_new_line != -1;
+    this->content = (is_there_a_double_new) ? raw.substr(double_new_line+2, raw.size()) : "\n";
+    std::string resp_and_headers = (is_there_a_double_new) ? raw.substr(0, double_new_line) : raw.substr(0, raw.size());
+
+    size_t first_new_line = resp_and_headers.find("\n");
+    std::string resp = resp_and_headers.substr(0, first_new_line);
+    size_t first_space = resp.find(" ");
+    this->http_ver = resp.substr(0, first_space);
+    this->status = resp.substr(first_space+1, resp.size());
+
+    std::string raw_headers = resp_and_headers.substr(first_new_line+1, resp_and_headers.size());
+    first_new_line = raw_headers.find("\n");
+
+    do
+    {
+        std::string header = raw_headers.substr(0, first_new_line);
+        size_t colon = header.find(":");
+        this->headers.insert({header.substr(0, colon), header.substr(colon+1, first_new_line)});
+        raw_headers = raw_headers.substr(first_new_line+1, raw_headers.size());
+        first_new_line = raw_headers.find("\n");
+    } while (first_new_line != -1);
+    
 }
 
 

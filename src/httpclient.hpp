@@ -12,12 +12,10 @@ namespace http
     class Response
     {
         public:
-            int                                 status;
+            std::string                         status;
             std::string                         raw;
-            std::string                         text;
+            std::string                         content;
             std::string                         http_ver;
-            std::string                         status_message;
-            std::vector<char>                   content;
             std::map<std::string, std::string>  headers;
 
             Response(std::string raw);
