@@ -19,5 +19,11 @@ std::cout << "This is the raw request: \n";
 std::cout << client.request->raw;
 http::Response response = client.request->send(); // send the GET request
 
+std::cout << response.raw      << "\n"; // print the raw response
+std::cout << response.http_ver << "\n"; // print the http protocol version
+std::cout << response.status   << "\n"; // print the status code and status message if there is one
+std::cout << response.headers  << "\n"; // get response headers as a map<std::string, std::string>
+std::cout << response.content  << "\n"; // print the response body as string
+
 // Client generates all the minimal request data and headers automatically.
 ```
